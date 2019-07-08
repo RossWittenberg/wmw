@@ -1,0 +1,5 @@
+node_modules
+dist
+.cache
+.env
+src/config/settings_data.json

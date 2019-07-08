@@ -1,0 +1,92 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Featured collection
+  - This the main section that you should be working on
+  - Main styling is done in /styles/sections/featured-collection.scss
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<section class="featured-collection" data-section-id="{{ section.id }}" data-section-type="featured-collection" id="main">
+  {%- assign collection = collections[section.settings.collection] -%}
+
+  <h1 class="blue collection-title reveal-1">
+    {{ collection.title | escape }}
+  </h1>
+
+  <p class="gray collection-description reveal-1">
+    {{ collection.description }}
+  </p>
+
+  <div class="product-cards--wrapper reveal-2">
+    <div class="product-cards">
+      {%- for product in collection.products limit: 6 -%}
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+        {% comment %} PRODUCT CARD -- Would typically make a snippet for this... {% endcomment %}
+        <div class="product-card">
+          <a href="{{ product.url | within: collection }}">
+            <div class="product-card--img-wrapper">
+              {%- if product.featured_image != blank -%}
+                <img class="prouct-image"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  src="{{ product.featured_image | img_url: '760x' }}"
+                >
+              {%- endif -%}
+              {%- for tag in product.tags -%}
+                {%- if tag contains 'badge' -%}
+                  <div class="bg--blue sale-badge">
+                    <h6 class="white">
+                        Sale
+                    </h6>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+              <div class="add-to-cart--wrapper hidden">
+                <button class="add-to-cart--button secondary" data-quantity="1" data-variant-id="{{ current_variant.id }}">
+                  Add to cart
+                </button>
+              </div>  
+            </div>
+            <div>
+              <p class="blue product-title">
+                {{ product.title | escape }}
+              </p>
+              <span class="product-price--wrapper">
+                {% include 'product-price' %}
+              </span>
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>  
+  </div>  
+  <div class="view-collection--wrapper reveal-2">
+    <a class="button view-collectiont--button primary" href="{{ collection.url }}" aria-label="View more of this collection">
+      View Collection
+    </a>
+  </div> 
+</section>
+
+{% schema %}
+  {
+    "name": "Featured collection",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Featured collection"
+      },
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "Collection"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured collection",
+        "category": "Collection"
+      }
+    ]
+  }
+{% endschema %}
